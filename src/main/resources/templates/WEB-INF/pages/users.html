@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Users</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div>
+    <table class="">
+      <caption>List of users</caption>
+      <tr>
+        <th>Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th colspan="2">Action</th>
+      </tr>
+      <tr th:each="user : ${users}">
+        <td th:text="${user.firstName}"></td>
+        <td th:text="${user.lastName}"></td>
+        <td th:text="${user.age}"></td>
+        <td th:text="${user.email}"></td>
+        <td><a th:href="@{/edit(id=${user.id})}">edit</a></td>
+        <td><a th:href="@{/delete(id=${user.id})}">delete</a></td>
+      </tr>
+      <tr>
+        <td colspan="7">
+          <a href="add">Add new user</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

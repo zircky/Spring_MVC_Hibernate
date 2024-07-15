@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: IntelliJ IDEA
+Built-By: ziran
+Build-Jdk: 21.0.3
+Implementation-Title: Spring_MVC_Hibernate
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: zi.zircky
+Main-Class: ${start-class}
+
