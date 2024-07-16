@@ -2,6 +2,7 @@ package zi.zircky.spring_mvc_hibernate.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,14 @@ public class UserDaoImpl implements UserDao {
     @PersistenceContext
     private final EntityManager em;
 
-    @Autowired
     public UserDaoImpl(EntityManager em) {
         this.em = em;
     }
 
-
     @Override
     public List<User> getAllUsers() {
-        return em.createQuery("select u from User u", User.class).getResultList();
+        TypedQuery<User> query = em.createQuery("FROM User", User.class);
+        return query.getResultList();
     }
 
     @Override
