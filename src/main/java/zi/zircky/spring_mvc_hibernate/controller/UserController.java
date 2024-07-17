@@ -2,6 +2,7 @@ package zi.zircky.spring_mvc_hibernate.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import zi.zircky.spring_mvc_hibernate.model.User;
+import zi.zircky.spring_mvc_hibernate.service.UserService;
 import zi.zircky.spring_mvc_hibernate.service.UserServiceImpl;
 
 import java.util.List;
@@ -16,29 +18,29 @@ import java.util.List;
 @Controller
 public class UserController {
 
-  private final UserServiceImpl userService;
+  private final UserService userService;
 
-  public UserController(UserServiceImpl userService) {
+  public UserController(UserService userService) {
     this.userService = userService;
   }
 
   @GetMapping(value = "/")
-  public String listOfUsers(ModelMap modelMap) {
+  public String listOfUsers(Model model) {
     List<User> users = userService.getAllUser();
-    modelMap.addAttribute("users", users);
+    model.addAttribute("users", users);
     return "users";
   }
 
   @GetMapping(value = "/add")
-  public String addUser(ModelMap modelMap) {
-    modelMap.addAttribute("user", new User());
+  public String addUser(Model model) {
+    model.addAttribute("user", new User());
     return "add";
   }
 
   @GetMapping("/edit")
-  public String editUser(@RequestParam("id") Long id, ModelMap modelMap) {
+  public String editUser(@RequestParam("id") Long id, Model model) {
     User user = userService.findById(id);
-    modelMap.addAttribute("user", user);
+    model.addAttribute("user", user);
     return "edit";
   }
 

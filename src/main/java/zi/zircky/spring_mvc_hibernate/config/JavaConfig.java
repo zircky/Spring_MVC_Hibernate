@@ -42,10 +42,10 @@ public class JavaConfig {
         return dataSource;
     }
 
-    @Bean(name = "entityManagerFactory")
+    @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
-        emf.setJpaVendorAdapter(getJpaVendorAdapter());
+        emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         emf.setDataSource(getDataSource());
         //emf.setPersistenceUnitName("userPersistenceUnit");
         emf.setPackagesToScan("zi.zircky.spring_mvc_hibernate");
