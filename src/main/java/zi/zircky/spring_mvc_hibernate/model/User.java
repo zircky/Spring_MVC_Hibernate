@@ -1,5 +1,6 @@
 package zi.zircky.spring_mvc_hibernate.model;
 
+
 import jakarta.persistence.*;
 
 @Entity

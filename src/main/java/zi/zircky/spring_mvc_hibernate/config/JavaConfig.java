@@ -1,21 +1,19 @@
 package zi.zircky.spring_mvc_hibernate.config;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import zi.zircky.spring_mvc_hibernate.model.User;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -29,6 +27,7 @@ public class JavaConfig {
 
     private final Environment env;
 
+    @Autowired
     public JavaConfig(Environment env) {
         this.env = env;
     }
@@ -43,8 +42,8 @@ public class JavaConfig {
         return dataSource;
     }
 
-    @Bean(name = "entityManagerFactoryBean")
-    public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setJpaVendorAdapter(getJpaVendorAdapter());
         emf.setDataSource(getDataSource());
@@ -68,8 +67,15 @@ public class JavaConfig {
         return new HibernateJpaVendorAdapter();
     }
 
-    @Bean(name = "transactionManager")
+    @Bean
     public PlatformTransactionManager getTransactionManager() {
-        return new JpaTransactionManager(getEntityManagerFactoryBean().getObject());
+        return new JpaTransactionManager(entityManagerFactoryBean().getObject());
+    }
+
+    @Bean
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
+        return transactionManager;
     }
 }
