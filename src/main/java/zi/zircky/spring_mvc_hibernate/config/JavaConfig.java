@@ -68,11 +68,6 @@ public class JavaConfig {
     }
 
     @Bean
-    public PlatformTransactionManager getTransactionManager() {
-        return new JpaTransactionManager(entityManagerFactoryBean().getObject());
-    }
-
-    @Bean
     public JpaTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactoryBean().getObject());
