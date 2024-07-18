@@ -17,13 +17,7 @@ public class UserDaoImpl implements UserDao {
     private static final Logger logger = Logger.getLogger(UserDaoImpl.class.getName());
 
     @PersistenceContext
-    private final EntityManager em;
-
-    @Autowired
-    public UserDaoImpl(EntityManager em) {
-        this.em = em;
-    }
-
+    private EntityManager em;
 
     @Override
     public List<User> getAllUsers() {
