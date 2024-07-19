@@ -1,17 +1,13 @@
 package zi.zircky.spring_mvc_hibernate.controller;
 
-import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import zi.zircky.spring_mvc_hibernate.model.User;
 import zi.zircky.spring_mvc_hibernate.service.UserService;
-import zi.zircky.spring_mvc_hibernate.service.UserServiceImpl;
 
 import java.util.List;
 
@@ -19,7 +15,7 @@ import java.util.List;
 public class UserController {
 
   private final UserService userService;
-
+  @Autowired
   public UserController(UserService userService) {
     this.userService = userService;
   }
@@ -45,7 +41,7 @@ public class UserController {
   }
 
   @PostMapping(value = "/add")
-  public String saveUser(@ModelAttribute @Valid User user, BindingResult bindingResult) {
+  public String saveUser(@ModelAttribute User user, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return "add";
     }
@@ -54,11 +50,11 @@ public class UserController {
   }
 
   @PostMapping(value = "/edit")
-  public String updateUser(@RequestParam(name = "id") Long id, @ModelAttribute @Valid User user, BindingResult bindingResult) {
+  public String updateUser(@RequestParam(name = "id") Long id, @ModelAttribute User user, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return "edit";
     }
-    userService.update(user);
+    userService.save(user);
     return "redirect:/";
   }
 
