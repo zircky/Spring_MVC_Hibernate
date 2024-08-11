@@ -8,7 +8,7 @@
 </head>
 <body>
 <main class="p-12 pb-52 rounded-l-lg flex justify-center">
-  <form th:action="@{/add}" th:method="POST" th:object="${user}">
+  <form th:action="@{/admin/addauser}" th:method="POST" th:object="${user}">
     <div>
       <input type="hidden" name="id" th:value="${user.id}"/>
     </div>
@@ -29,8 +29,24 @@
       <input type="email" th:id="email" name="email" th:field="*{email}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
     </div>
     <div class="mt-2.5">
+      <label th:for="username">Username:</label><br>
+      <input type="text" th:id="username" name="username" th:field="*{username}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
+    </div>
+    <div class="mt-2.5">
+      <label th:for="password">Password:</label><br>
+      <input type="text" th:id="password" name="password" th:field="*{password}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
+    </div>
+    <div class="mt-2.5">
+    <label for="role">Select role:</label>
+    <select id="role" name="role">
+      <option value="ROLE_USER">User Role</option>
+      <option value="ROLE_ADMIN">Admin Role</option>
+    </select>
+    </div>
+    <div class="mt-2.5">
       <input type="submit" value="Submit" class="rounded-md bg-gradient-to-r from-indigo-600 to-indigo-700 px-3 py-2 ml-[9.2rem] text-sm font-semibold text-white shadow-sm hover:bg-gradient-to-r from-indigo-500 to-indigo-600">
     </div>
+
   </form>
 </main>
 

@@ -5,15 +5,23 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 @Setter
 @Getter
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "name")
     private String firstName;
@@ -27,17 +35,30 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+        name = "users_roles",
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
+    private Collection<Role> roles;
+
     public User() {}
 
-    public User(String firstName, String lastName, int age, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.email = email;
+    public static String getStringRoles(Collection<Role> roles) {
+        return roles.stream()
+            .map(role -> role.getAuthority().replaceAll("ROLE_", ""))
+            .collect(Collectors.joining(", "));
     }
 
-  @Override
+    @Override
     public String toString() {
-        return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age + ", email=" + email + "]";
+        return "User [id=" + id +
+            ", username=" + username +
+            ", password=" + password +
+            ", firstName=" + firstName +
+            ", lastName=" + lastName +
+            ", age=" + age +
+            ", email=" + email + "]";
     }
 }
