@@ -31,15 +31,15 @@ public class AdminController {
   public String loginForm(Model model) {
     model.addAttribute("user", new User());
     model.addAttribute("roles", roleService.getAllRoles());
-    return "login";
+    return "logins";
   }
 
-  @PostMapping("/loginauser")
+  @PostMapping("/login")
   public String login(@ModelAttribute("user") User user,
                        BindingResult bindingResult,
                        @RequestParam("role") String selectedRole) {
     if (bindingResult.hasErrors()) {
-      return "login";
+      return "logins";
     }
     if (selectedRole.equals("ROLE_USER")) {
       user.setRoles(roleService.findByName("ROLE_USER"));

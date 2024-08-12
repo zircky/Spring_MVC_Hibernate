@@ -14,29 +14,17 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Set;
 
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
-  private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                      FilterChain chain, Authentication authentication)
-      throws IOException, ServletException {
-    AuthenticationSuccessHandler.super
-        .onAuthenticationSuccess(request, response, chain, authentication);
-  }
-
-  @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                      Authentication authentication) throws IOException {
-    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-    for (GrantedAuthority authority : authorities) {
-      if (authority.getAuthority().equals("ROLE_ADMIN")) {
-        redirectStrategy.sendRedirect(request, response, "/admin/page");
-        return;
-      }
+  public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
+    Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+    if (roles.contains("ROLE_USER")) {
+      httpServletResponse.sendRedirect("/user");
+    } else {
+      httpServletResponse.sendRedirect("/admin");
     }
-    redirectStrategy.sendRedirect(request, response, "/user");
   }
 }
