@@ -8,7 +8,7 @@
 </head>
 <body>
 <main class="p-12 pb-52 rounded-l-lg flex justify-center">
-  <form th:action="@{/admin/addauser}" th:method="POST" th:object="${user}">
+  <form th:action="@{/admin/create}" th:method="POST" th:object="${user}">
     <div>
       <input type="hidden" name="id" th:value="${user.id}"/>
     </div>

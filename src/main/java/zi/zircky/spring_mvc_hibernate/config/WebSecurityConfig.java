@@ -6,48 +6,50 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import zi.zircky.spring_mvc_hibernate.config.PasswordEncoder;
-
-import javax.sql.DataSource;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfiguration {
 
-  private final SuccessUserHandler successUserHandler;
   private final BCryptPasswordEncoder getbCryptPasswordEncoder;
   private final UserDetailsService userDetailsService;
 
-  public WebSecurityConfig(SuccessUserHandler successUserHandler, UserDetailsService userDetailsService, BCryptPasswordEncoder getbCryptPasswordEncoder) {
+  public WebSecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder getbCryptPasswordEncoder) {
     this.userDetailsService = userDetailsService;
     this.getbCryptPasswordEncoder = getbCryptPasswordEncoder;
-    this.successUserHandler = successUserHandler;
   }
 
-
   protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-    http.
-        authorizeHttpRequests((authorize) -> authorize
-            .requestMatchers("/", "/index", "/error").permitAll()
-            .requestMatchers("/admin/**").hasRole("ADMIN")
-            .anyRequest().hasAnyRole("USER", "ADMIN")
-        )
-        .formLogin()
-        .loginPage("/pages/login")
-        .successHandler(successUserHandler)
-        .and()
-        .logout()
-        .logoutUrl("/logout")
-        .logoutSuccessUrl("/")
-        .and()
-        .exceptionHandling((exceptions) -> exceptions.accessDeniedPage("/forbidden"));
+    http.authorizeHttpRequests((authorize) -> {
+          try {
+            authorize
+                .requestMatchers("/", "/index", "/sign-up", "/login", "/error").permitAll();
+//                .requestMatchers("/admin/**").hasRole("ADMIN")
+//                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+//                .anyRequest().authenticated();
+          } catch (Exception e) {
+            throw new RuntimeException(e);
+          }
+        }
+    ).securityContext((securityContext) -> securityContext
+        .requireExplicitSave(false));
+
+    http.formLogin(form -> {
+      try {
+        form.loginPage("/login").permitAll().defaultSuccessUrl("/")
+            .successHandler(successHandler());
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    });
+
+    http.logout().logoutSuccessUrl("/");
+
+    http.exceptionHandling((exceptions) -> exceptions.accessDeniedPage("/forbidden"));
     return http.build();
   }
 
@@ -69,6 +71,11 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
 //  }
 
   @Bean
+  public AuthenticationSuccessHandler successHandler() {
+    return new SuccessUserHandler();
+  }
+
+  @Bean
   public DaoAuthenticationProvider daoAuthenticationProvider() {
     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
@@ -78,9 +85,5 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
     return authenticationProvider;
   }
 
-//  @Bean
-//  public SpringSecurityDialect springSecurityDialect() {
-//    return new SpringSecurityDialect();
-//  }
 }
 

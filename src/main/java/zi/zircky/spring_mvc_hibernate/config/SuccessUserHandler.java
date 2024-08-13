@@ -1,30 +1,29 @@
 package zi.zircky.spring_mvc_hibernate.config;
 
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.web.DefaultRedirectStrategy;
-import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import zi.zircky.spring_mvc_hibernate.model.User;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Set;
 
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-    Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-    if (roles.contains("ROLE_USER")) {
-      httpServletResponse.sendRedirect("/user");
-    } else {
-      httpServletResponse.sendRedirect("/admin");
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    User user = (User) authentication.getPrincipal();
+    String redirectURL = request.getContextPath();
+
+    if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+      redirectURL = "/admin";
+    } else if (user.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+      redirectURL = "/user";
     }
+
+    response.sendRedirect(redirectURL);
   }
 }

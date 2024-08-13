@@ -17,8 +17,8 @@ public class AdminController {
 
   @Autowired
   public AdminController(UserService userService, RoleService roleService) {
-    this.userService=userService;
-    this.roleService=roleService;
+    this.userService = userService;
+    this.roleService = roleService;
   }
 
   @GetMapping()
@@ -27,42 +27,19 @@ public class AdminController {
     return "admin";
   }
 
-  @GetMapping("/login")
-  public String loginForm(Model model) {
-    model.addAttribute("user", new User());
-    model.addAttribute("roles", roleService.getAllRoles());
-    return "logins";
-  }
-
-  @PostMapping("/login")
-  public String login(@ModelAttribute("user") User user,
-                       BindingResult bindingResult,
-                       @RequestParam("role") String selectedRole) {
-    if (bindingResult.hasErrors()) {
-      return "logins";
-    }
-    if (selectedRole.equals("ROLE_USER")) {
-      user.setRoles(roleService.findByName("ROLE_USER"));
-    } else if (selectedRole.equals("ROLE_ADMIN")) {
-      user.setRoles(roleService.getAllRoles());
-    }
-    userService.createUser(user);
-    return "redirect:/admin";
-  }
-
-  @GetMapping("/add")
+  @GetMapping("/create")
   public String createForm(Model model) {
     model.addAttribute("user", new User());
     model.addAttribute("roles", roleService.getAllRoles());
-    return "add";
+    return "create";
   }
 
-  @PostMapping("/addauser")
+  @PostMapping("/create")
   public String create(@ModelAttribute("user") User user,
                        BindingResult bindingResult,
                        @RequestParam("role") String selectedRole) {
     if (bindingResult.hasErrors()) {
-      return "add";
+      return "create";
     }
     if (selectedRole.equals("ROLE_USER")) {
       user.setRoles(roleService.findByName("ROLE_USER"));
@@ -77,16 +54,16 @@ public class AdminController {
   public String updateForm(Model model,
                            @RequestParam("id") Long id) {
     model.addAttribute(userService.readUserById(id));
-    return "edit";
+    return "update";
   }
 
-  @PostMapping("/updateauser")
+  @PostMapping("/update")
   public String update(@ModelAttribute("user") User user,
                        BindingResult bindingResult,
                        @RequestParam("role") String selectedRole,
                        @RequestParam("id") Long id) {
     if (bindingResult.hasErrors()) {
-      return "edit";
+      return "update";
     }
     if (selectedRole.equals("ROLE_USER")) {
       user.setRoles(roleService.findByName("ROLE_USER"));
