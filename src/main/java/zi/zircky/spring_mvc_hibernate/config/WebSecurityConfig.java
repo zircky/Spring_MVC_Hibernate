@@ -18,19 +18,26 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
   private final BCryptPasswordEncoder getbCryptPasswordEncoder;
   private final UserDetailsService userDetailsService;
 
+  private HttpSecurity httpSecurity;
+
   public WebSecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder getbCryptPasswordEncoder) {
     this.userDetailsService = userDetailsService;
     this.getbCryptPasswordEncoder = getbCryptPasswordEncoder;
   }
 
-  protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+  public void setHttpSecurity(HttpSecurity httpSecurity) {
+    this.httpSecurity = httpSecurity;
+  }
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests((authorize) -> {
           try {
             authorize
-                .requestMatchers("/", "/index", "/sign-up", "/login", "/error").permitAll();
-//                .requestMatchers("/admin/**").hasRole("ADMIN")
-//                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-//                .anyRequest().authenticated();
+                .requestMatchers("/", "/index", "/sign-up", "/login", "/error").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .anyRequest().authenticated();
           } catch (Exception e) {
             throw new RuntimeException(e);
           }
@@ -40,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
 
     http.formLogin(form -> {
       try {
-        form.loginPage("/login").permitAll().defaultSuccessUrl("/")
+        form.loginPage("/login").permitAll()
             .successHandler(successHandler());
       } catch (Exception e) {
         throw new RuntimeException(e);
