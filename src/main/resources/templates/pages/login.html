@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>login</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-<main class="p-12 pb-52 rounded-l-lg flex justify-center">
-  <form th:action="@{/login}" th:method="POST">
-    <fieldset>
-    <div th:if="${param.error != null}">
-      Invalid username and password.
-    </div>
-    <div th:if="${param.logout != null}">
-      You have been logged out.
-    </div>
-    <div class="mt-2.5">
-      <label>Username: </label><br>
-      <input
-          class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
-          id="username" name="username"
-          type="text"><br>
-    </div>
-    <div class="mt-2.5">
-      <label>Password: </label><br>
-      <input
-          class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
-          id="password" name="password"
-          type="text"><br>
-    </div>
-    <div class="mt-2.5">
-      <button
-          class="rounded-md bg-gradient-to-r from-indigo-600 to-indigo-700 px-3 py-2 ml-[9.2rem] text-sm font-semibold text-white shadow-sm hover:bg-gradient-to-r from-indigo-500 to-indigo-600"
-          type="submit"
-          value="Submit">Sign in</button>
-    </div>
-    </fieldset>
-  </form>
-  </form>
-</main>
-</body>
+<html
+  lang="en"
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <main class="p-12 pb-52 rounded-l-lg flex justify-center">
+      <form th:action="@{/login}" th:method="POST">
+        <fieldset>
+          <div th:if="${param.error != null}">
+            Invalid username and password.
+          </div>
+          <div th:if="${param.logout != null}">You have been logged out.</div>
+          <div class="mt-2.5">
+            <label>Username: </label><br />
+            <input
+              class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
+              id="username"
+              name="username"
+              type="text"
+            /><br />
+          </div>
+          <div class="mt-2.5">
+            <label>Password: </label><br />
+            <input
+              class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
+              id="password"
+              name="password"
+              type="text"
+            /><br />
+          </div>
+          <div class="mt-2.5">
+            <a href="/reg">Sign up</a>
+            <button
+              class="rounded-md bg-gradient-to-r from-indigo-600 to-indigo-700 px-3 py-2 ml-[9.2rem] text-sm font-semibold text-white shadow-sm hover:bg-gradient-to-r from-indigo-500 to-indigo-600"
+              type="submit"
+              value="Submit"
+            >
+              Sign in
+            </button>
+          </div>
+        </fieldset>
+      </form>
+    </main>
+  </body>
 </html>

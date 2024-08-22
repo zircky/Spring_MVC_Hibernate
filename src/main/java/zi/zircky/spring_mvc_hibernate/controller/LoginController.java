@@ -9,4 +9,9 @@ public class LoginController {
   public String login() {
     return "login";
   }
+
+  @GetMapping("/authenticate")
+  public String authenticate() {
+    return "login";
+  }
 }
