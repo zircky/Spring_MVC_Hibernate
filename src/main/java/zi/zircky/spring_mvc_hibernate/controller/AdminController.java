@@ -1,5 +1,6 @@
 package zi.zircky.spring_mvc_hibernate.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,7 +59,7 @@ public class AdminController {
   }
 
   @PostMapping("/update")
-  public String update(@ModelAttribute("user") User user,
+  public String update(@ModelAttribute("user") @Valid User user,
                        BindingResult bindingResult,
                        @RequestParam("role") String selectedRole,
                        @RequestParam("id") Long id) {
@@ -74,9 +75,10 @@ public class AdminController {
     return "redirect:/admin";
   }
 
-  @PostMapping("/delete")
-  public String delete(@RequestParam("id") Long id) {
+  @PostMapping("/delete/{id}")
+  public String deleteUser(@PathVariable("id") Long id) {
     userService.delete(id);
     return "redirect:/admin";
   }
+
 }

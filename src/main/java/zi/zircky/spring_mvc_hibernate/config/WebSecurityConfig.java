@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
       }
     });
 
-    http.logout().logoutSuccessUrl("/");
+    http.logout().logoutSuccessUrl("/login?logout");
 
     http.exceptionHandling((exceptions) -> exceptions.accessDeniedPage("/forbidden"));
     return http.build();
