@@ -32,17 +32,16 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests((authorize) -> {
-          try {
-            authorize
-                .requestMatchers("/", "/index", "/sign-up", "/login", "/error").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-                .anyRequest().authenticated();
-          } catch (Exception e) {
-            throw new RuntimeException(e);
-          }
-        }
-    ).securityContext((securityContext) -> securityContext
+      try {
+        authorize
+            .requestMatchers("/", "/index", "/sign-up", "/login", "/error").permitAll()
+            .requestMatchers("/admin/**").hasRole("ADMIN")
+            .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+            .anyRequest().authenticated();
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    }).securityContext((securityContext) -> securityContext
         .requireExplicitSave(false));
 
     http.formLogin(form -> {
@@ -60,22 +59,23 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
     return http.build();
   }
 
-//  @Bean
-//  public JdbcUserDetailsManager users(DataSource dataSource) {
-//    UserDetails userDetails = User.builder()
-//        .username("user")
-//        .password("{bcrypt}$2a$12$e8bJMGMgpqnznZPnkrqb1OA5WkI2/R06sXOxfgn.mw3kZpQwAUvjO")
-//        .roles("USER", "ADMIN")
-//        .build();
-//
-//    JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-//    if (jdbcUserDetailsManager.userExists(userDetails.getUsername())) {
-//      jdbcUserDetailsManager.deleteUser(userDetails.getUsername());
-//    }
-//    jdbcUserDetailsManager.createUser(userDetails);
-//    return jdbcUserDetailsManager;
-//
-//  }
+  // @Bean
+  // public JdbcUserDetailsManager users(DataSource dataSource) {
+  // UserDetails userDetails = User.builder()
+  // .username("user")
+  // .password("{bcrypt}$2a$12$e8bJMGMgpqnznZPnkrqb1OA5WkI2/R06sXOxfgn.mw3kZpQwAUvjO")
+  // .roles("USER", "ADMIN")
+  // .build();
+  //
+  // JdbcUserDetailsManager jdbcUserDetailsManager = new
+  // JdbcUserDetailsManager(dataSource);
+  // if (jdbcUserDetailsManager.userExists(userDetails.getUsername())) {
+  // jdbcUserDetailsManager.deleteUser(userDetails.getUsername());
+  // }
+  // jdbcUserDetailsManager.createUser(userDetails);
+  // return jdbcUserDetailsManager;
+  //
+  // }
 
   @Bean
   public AuthenticationSuccessHandler successHandler() {
@@ -93,4 +93,3 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
   }
 
 }
-
