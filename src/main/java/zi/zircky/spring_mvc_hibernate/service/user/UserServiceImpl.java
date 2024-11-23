@@ -1,4 +1,4 @@
-package zi.zircky.spring_mvc_hibernate.service;
+package zi.zircky.spring_mvc_hibernate.service.user;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +9,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import zi.zircky.spring_mvc_hibernate.dao.RoleDao;
 import zi.zircky.spring_mvc_hibernate.dao.UserDao;
 import zi.zircky.spring_mvc_hibernate.model.Role;
 import zi.zircky.spring_mvc_hibernate.model.User;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,23 +22,33 @@ public class UserServiceImpl implements UserService {
 
   private final UserDao userDao;
   private final BCryptPasswordEncoder getbCryptPasswordEncoder;
-  private final RoleService roleService;
+  private final RoleDao roleDao;
 
   @Autowired
-  public UserServiceImpl(UserDao userDao, BCryptPasswordEncoder getbCryptPasswordEncoder, RoleService roleService) {
+  public UserServiceImpl(UserDao userDao, BCryptPasswordEncoder getbCryptPasswordEncoder, RoleDao roleDao) {
     this.userDao = userDao;
     this.getbCryptPasswordEncoder = getbCryptPasswordEncoder;
-    this.roleService = roleService;
+    this.roleDao = roleDao;
   }
 
   @Override
   @Transactional
-  public void createUser(User user) {
-    if (user.getRoles() == null || user.getRoles().isEmpty()) {
-      user.setRoles(roleService.findByName("ROLE_USER"));
-    }
+  public User createUser(User user) {
+    Set<Role> roles = new HashSet<Role>();
+
     user.setPassword(getbCryptPasswordEncoder.encode(user.getPassword()));
-    userDao.save(user);
+    user.getRoles().forEach(role -> {
+      if (role.getId() > 0) {
+        Role nRole = roleDao.findById(role.getId()).get();
+        nRole.getUsers().add(user);
+        roles.add(nRole);
+      } else {
+        roles.add(role);
+      }
+    });
+    user.setRoles(roles);
+
+    return userDao.save(user);
   }
 
   @Override
@@ -71,8 +80,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public void delete(Long id) {
-    userDao.deleteById(id);
+  public boolean delete(Long userId) {
+    if (userDao.findById(userId).isPresent()) {
+      userDao.deleteById(userId);
+      return true;
+    }
+    return false;
   }
 
   @Override
@@ -91,12 +104,9 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userDao.findByUsername(username);
-    if (user == null) {
-      throw new UsernameNotFoundException(String.format("User %s not found", username));
-    }
+    UserDetailsPrincipal userDetailsPrincipal = new UserDetailsPrincipal(user);
 
-    return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-        mapRolesToAuthorities(user.getRoles()));
+    return userDetailsPrincipal;
   }
 
   private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {

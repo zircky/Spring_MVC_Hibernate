@@ -55,11 +55,15 @@
           type="text"><br>
     </div>
     <div class="mt-2.5">
-      <label for="role">Select role:</label>
-      <select id="role" name="role">
-        <option value="ROLE_USER">User Role</option>
-        <option value="ROLE_ADMIN">Admin Role</option>
-      </select>
+      <label class="" for="roles">Select role:</label>
+      <div class="my-6 md:w-60">
+        <select
+            class="relative w-full h-10 px-4 text-sm transition-all bg-white border-b outline-none appearance-none focus-visible:outline-none peer border-slate-200 text-slate-500 autofill:bg-white focus:border-emerald-500 focus:focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
+            id="roles"
+            th:field="*{roles}">
+          <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.id}"></option>
+        </select>
+      </div>
     </div>
     <div class="mt-2.5">
       <input

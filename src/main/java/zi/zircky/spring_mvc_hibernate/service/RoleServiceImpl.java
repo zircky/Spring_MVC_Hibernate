@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 import zi.zircky.spring_mvc_hibernate.dao.RoleDao;
 import zi.zircky.spring_mvc_hibernate.model.Role;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -28,7 +29,12 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public Collection<Role> findByName(String name) {
+  public Set<Role> findByName(String name) {
     return roleDao.findByName(name);
+  }
+
+  @Override
+  public Set<Role> findByIds(List<Long> ids) {
+    return new HashSet<>(roleDao.findAllById(ids));
   }
 }

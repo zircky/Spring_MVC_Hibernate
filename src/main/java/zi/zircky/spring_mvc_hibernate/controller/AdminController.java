@@ -8,7 +8,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import zi.zircky.spring_mvc_hibernate.model.User;
 import zi.zircky.spring_mvc_hibernate.service.RoleService;
-import zi.zircky.spring_mvc_hibernate.service.UserService;
+import zi.zircky.spring_mvc_hibernate.service.user.UserService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -38,15 +40,11 @@ public class AdminController {
   @PostMapping("/create")
   public String create(@ModelAttribute("user") User user,
                        BindingResult bindingResult,
-                       @RequestParam("role") String selectedRole) {
+                       @RequestParam("roles") List<Long> roleIds) {
     if (bindingResult.hasErrors()) {
       return "create";
     }
-    if (selectedRole.equals("ROLE_USER")) {
-      user.setRoles(roleService.findByName("ROLE_USER"));
-    } else if (selectedRole.equals("ROLE_ADMIN")) {
-      user.setRoles(roleService.getAllRoles());
-    }
+    user.setRoles(roleService.findByIds(roleIds));
     userService.createUser(user);
     return "redirect:/admin";
   }
@@ -61,23 +59,33 @@ public class AdminController {
   @PostMapping("/update")
   public String update(@ModelAttribute("user") @Valid User user,
                        BindingResult bindingResult,
-                       @RequestParam("role") String selectedRole,
+                       @RequestParam("role") List<Long> roleIds,
                        @RequestParam("id") Long id) {
     if (bindingResult.hasErrors()) {
       return "update";
     }
-    if (selectedRole.equals("ROLE_USER")) {
-      user.setRoles(roleService.findByName("ROLE_USER"));
-    } else if (selectedRole.equals("ROLE_ADMIN")) {
-      user.setRoles(roleService.getAllRoles());
-    }
+    user.setRoles(roleService.findByIds(roleIds));
     userService.updateUser(id, user);
     return "redirect:/admin";
   }
 
-  @PostMapping("/delete/{id}")
-  public String deleteUser(@PathVariable("id") Long id) {
-    userService.delete(id);
+  @GetMapping("/delete")
+  public String deleteUserForm(@RequestParam(required = true, defaultValue = "") Long userId,
+                               @RequestParam(required = true, defaultValue = "") String action,
+                               Model model) {
+    if (action.equals("delete")) {
+      userService.delete(userId);
+    }
+    return "redirect:/admin";
+  }
+
+  @PostMapping("/delete")
+  public String deleteUser(@RequestParam(required = true, defaultValue = "") Long userId,
+                           @RequestParam(required = true, defaultValue = "") String action,
+                           Model model) {
+    if (action.equals("delete")) {
+      userService.delete(userId);
+    }
     return "redirect:/admin";
   }
 

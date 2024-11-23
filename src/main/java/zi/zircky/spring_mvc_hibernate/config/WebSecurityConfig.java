@@ -1,32 +1,30 @@
 package zi.zircky.spring_mvc_hibernate.config;
 
+import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import zi.zircky.spring_mvc_hibernate.service.user.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfiguration {
 
   private final BCryptPasswordEncoder getbCryptPasswordEncoder;
-  private final UserDetailsService userDetailsService;
+  private final UserService userService;
 
+  @Setter
   private HttpSecurity httpSecurity;
 
-  public WebSecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder getbCryptPasswordEncoder) {
-    this.userDetailsService = userDetailsService;
+  public WebSecurityConfig(UserService userService, BCryptPasswordEncoder getbCryptPasswordEncoder) {
+    this.userService = userService;
     this.getbCryptPasswordEncoder = getbCryptPasswordEncoder;
-  }
-
-  public void setHttpSecurity(HttpSecurity httpSecurity) {
-    this.httpSecurity = httpSecurity;
   }
 
   @Bean
@@ -53,29 +51,12 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
       }
     });
 
-    http.logout().logoutSuccessUrl("/login?logout");
+    http.logout().logoutSuccessUrl("/");
 
     http.exceptionHandling((exceptions) -> exceptions.accessDeniedPage("/forbidden"));
     return http.build();
   }
 
-  // @Bean
-  // public JdbcUserDetailsManager users(DataSource dataSource) {
-  // UserDetails userDetails = User.builder()
-  // .username("user")
-  // .password("{bcrypt}$2a$12$e8bJMGMgpqnznZPnkrqb1OA5WkI2/R06sXOxfgn.mw3kZpQwAUvjO")
-  // .roles("USER", "ADMIN")
-  // .build();
-  //
-  // JdbcUserDetailsManager jdbcUserDetailsManager = new
-  // JdbcUserDetailsManager(dataSource);
-  // if (jdbcUserDetailsManager.userExists(userDetails.getUsername())) {
-  // jdbcUserDetailsManager.deleteUser(userDetails.getUsername());
-  // }
-  // jdbcUserDetailsManager.createUser(userDetails);
-  // return jdbcUserDetailsManager;
-  //
-  // }
 
   @Bean
   public AuthenticationSuccessHandler successHandler() {
@@ -87,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
     DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
     authenticationProvider.setPasswordEncoder(getbCryptPasswordEncoder);
-    authenticationProvider.setUserDetailsService(userDetailsService);
+    authenticationProvider.setUserDetailsService(this.userService);
 
     return authenticationProvider;
   }

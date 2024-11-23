@@ -10,41 +10,52 @@
 <main class="p-12 pb-52 rounded-l-lg flex justify-center">
   <form th:action="@{/admin/create}" th:method="POST" th:object="${user}">
     <div>
-      <input type="hidden" name="id" th:value="${user.id}"/>
+      <input name="id" th:value="${user.id}" type="hidden"/>
     </div>
     <div class="mt-2.5">
       <label th:for="name">First Name: </label><br>
-      <input type="text" th:id="name" name="name" th:field="*{firstName}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
+      <input class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg" name="name" required th:field="*{firstName}" th:id="name"
+             type="text"><br>
     </div>
     <div class="mt-2.5">
       <label th:for="lastName">Last Name: </label><br>
-      <input type="text" th:id="lastName" name="lastName" th:field="*{lastName}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
+      <input class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg" name="lastName" required th:field="*{lastName}" th:id="lastName"
+             type="text"><br>
     </div>
     <div class="mt-2.5">
       <label th:for="age">Age:</label><br>
-      <input type="number" th:id="age" name="age" th:field="*{age}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
+      <input class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg" name="age" required th:field="*{age}" th:id="age"
+             type="number"><br>
     </div>
     <div class="mt-2.5">
       <label th:for="email">Email:</label><br>
-      <input type="email" th:id="email" name="email" th:field="*{email}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
+      <input class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg" name="email" required th:field="*{email}" th:id="email"
+             type="email"><br>
     </div>
     <div class="mt-2.5">
       <label th:for="username">Username:</label><br>
-      <input type="text" th:id="username" name="username" th:field="*{username}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
+      <input class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg" name="username" required th:field="*{username}" th:id="username"
+             type="text"><br>
     </div>
     <div class="mt-2.5">
       <label th:for="password">Password:</label><br>
-      <input type="text" th:id="password" name="password" th:field="*{password}" required class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"><br>
+      <input class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg" name="password" required th:field="*{password}" th:id="password"
+             type="text"><br>
     </div>
     <div class="mt-2.5">
-    <label for="role">Select role:</label>
-    <select id="role" name="role">
-      <option value="ROLE_USER">User Role</option>
-      <option value="ROLE_ADMIN">Admin Role</option>
-    </select>
+      <label class="" for="roles">Select role:</label>
+      <div class="my-6 md:w-60">
+        <select
+            class="relative w-full h-10 px-4 text-sm transition-all bg-white border-b outline-none appearance-none focus-visible:outline-none peer border-slate-200 text-slate-500 autofill:bg-white focus:border-emerald-500 focus:focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
+            id="roles"
+            th:field="*{roles}">
+          <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.id}"></option>
+        </select>
+      </div>
     </div>
     <div class="mt-2.5">
-      <input type="submit" value="Submit" class="rounded-md bg-gradient-to-r from-indigo-600 to-indigo-700 px-3 py-2 ml-[9.2rem] text-sm font-semibold text-white shadow-sm hover:bg-gradient-to-r from-indigo-500 to-indigo-600">
+      <input class="rounded-md bg-gradient-to-r from-indigo-600 to-indigo-700 px-3 py-2 ml-[9.2rem] text-sm font-semibold text-white shadow-sm hover:bg-gradient-to-r from-indigo-500 to-indigo-600" type="submit"
+             value="Submit">
     </div>
 
   </form>

@@ -4,17 +4,19 @@ package zi.zircky.spring_mvc_hibernate.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Setter
 @Getter
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -37,12 +39,13 @@ public class User implements UserDetails {
   @Column(name = "email")
   private String email;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @Fetch(FetchMode.JOIN)
   @JoinTable(
       name = "users_roles",
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "roles_id"))
-  private Collection<Role> roles;
+  private Set<Role> roles = new HashSet<>();
 
   public User() {
   }
@@ -53,10 +56,6 @@ public class User implements UserDetails {
         .collect(Collectors.joining(", "));
   }
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return roles;
-  }
 
   @Override
   public String toString() {
