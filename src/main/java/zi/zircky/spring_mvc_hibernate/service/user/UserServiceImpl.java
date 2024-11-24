@@ -80,12 +80,15 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public boolean delete(Long userId) {
-    if (userDao.findById(userId).isPresent()) {
-      userDao.deleteById(userId);
-      return true;
+  public void delete(Long userId) {
+    User user = userDao.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+    for (Role role : user.getRoles()) {
+      role.getUsers().remove(user);
     }
-    return false;
+    user.getRoles().clear();
+
+    userDao.delete(user);
   }
 
   @Override

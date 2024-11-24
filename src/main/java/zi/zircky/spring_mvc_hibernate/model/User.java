@@ -39,7 +39,7 @@ public class User {
   @Column(name = "email")
   private String email;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
   @Fetch(FetchMode.JOIN)
   @JoinTable(
       name = "users_roles",

@@ -49,14 +49,14 @@ public class AdminController {
     return "redirect:/admin";
   }
 
-  @GetMapping("/update")
+  @GetMapping("/update/{id}")
   public String updateForm(Model model,
-                           @RequestParam("id") Long id) {
+                           @PathVariable Long id) {
     model.addAttribute(userService.readUserById(id));
     return "update";
   }
 
-  @PostMapping("/update")
+  @PostMapping("/update/{id}")
   public String update(@ModelAttribute("user") @Valid User user,
                        BindingResult bindingResult,
                        @RequestParam("role") List<Long> roleIds,
@@ -69,23 +69,10 @@ public class AdminController {
     return "redirect:/admin";
   }
 
-  @GetMapping("/delete")
-  public String deleteUserForm(@RequestParam(required = true, defaultValue = "") Long userId,
-                               @RequestParam(required = true, defaultValue = "") String action,
-                               Model model) {
-    if (action.equals("delete")) {
-      userService.delete(userId);
-    }
-    return "redirect:/admin";
-  }
-
-  @PostMapping("/delete")
-  public String deleteUser(@RequestParam(required = true, defaultValue = "") Long userId,
-                           @RequestParam(required = true, defaultValue = "") String action,
-                           Model model) {
-    if (action.equals("delete")) {
-      userService.delete(userId);
-    }
+  @PostMapping("/delete/{id}")
+  @DeleteMapping("/delete/{id}")
+  public String deleteUser(@PathVariable Long id) {
+    userService.delete(id);
     return "redirect:/admin";
   }
 

@@ -6,12 +6,11 @@ import zi.zircky.spring_mvc_hibernate.model.User;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-  User
-  createUser(User user);
+  User createUser(User user);
 
   User findByUsername(String usernames);
 
-  boolean delete(Long id);
+  void delete(Long id);
 
   User findById(Long id);
 
