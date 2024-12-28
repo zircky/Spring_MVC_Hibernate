@@ -16,7 +16,7 @@
       <th class="px-6 py-3" scope="col">Age</th>
       <th class="px-6 py-3" scope="col">Email</th>
       <th class="px-6 py-3" scope="col">Username</th>
-      <th class="px-6 py-3" colspan="2" scope="col">Action</th>
+      <th class="px-6 py-3 " colspan="2" scope="col">Action</th>
     </tr>
     </thead>
     <tbody>
@@ -27,7 +27,7 @@
       <td class="px-6 py-4" th:text="${user.username}"></td>
       <td class="px-6 py-4" th:text="${user.email}"></td>
       <td class="px-1 py-1">
-        <a th:href="@{/admin/update/{id}(id=${user.id})}">
+        <a th:href="@{/admin/update(id=${user.id})}">
           <img class="w-8 h-8" th:src="@{/img/edit-2-line.svg}">
         </a>
       </td>

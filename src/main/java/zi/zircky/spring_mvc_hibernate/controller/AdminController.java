@@ -49,17 +49,17 @@ public class AdminController {
     return "redirect:/admin";
   }
 
-  @GetMapping("/update/{id}")
+  @GetMapping("/update")
   public String updateForm(Model model,
-                           @PathVariable Long id) {
-    model.addAttribute(userService.readUserById(id));
+                           @RequestParam("id") Long id) {
+    model.addAttribute("user", userService.readUserById(id));
     return "update";
   }
 
-  @PostMapping("/update/{id}")
+  @PostMapping("/update")
   public String update(@ModelAttribute("user") @Valid User user,
                        BindingResult bindingResult,
-                       @RequestParam("role") List<Long> roleIds,
+                       @RequestParam("roles") List<Long> roleIds,
                        @RequestParam("id") Long id) {
     if (bindingResult.hasErrors()) {
       return "update";
