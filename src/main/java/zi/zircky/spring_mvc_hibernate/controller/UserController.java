@@ -17,15 +17,10 @@ public class UserController {
   public UserController(UserService userService) {
     this.userService = userService;
   }
-
-  @GetMapping("/")
-  public String index() {
-    return "home";
-  }
-
+  
   @GetMapping("/user")
   public String readUser(Principal principal, Model model) {
     model.addAttribute("user", userService.findByUsername(principal.getName()));
-    return "users";
+    return "user";
   }
 }
