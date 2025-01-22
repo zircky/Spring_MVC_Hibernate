@@ -3,7 +3,6 @@ package zi.zircky.spring_mvc_hibernate;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 import zi.zircky.spring_mvc_hibernate.dao.RoleDao;
-import zi.zircky.spring_mvc_hibernate.model.Role;
 
 @Component
 public class AddUseAndRoleInTable {
@@ -15,8 +14,8 @@ public class AddUseAndRoleInTable {
 
   @PostConstruct
   private void init() {
-    roleDao.saveAndFlush(new Role("ADMIN"));
-    roleDao.saveAndFlush(new Role("USER"));
+//    roleDao.saveAndFlush(new Role("ADMIN"));
+//    roleDao.saveAndFlush(new Role("USER"));
 
   }
 }
