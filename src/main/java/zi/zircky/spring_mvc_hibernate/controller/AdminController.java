@@ -2,6 +2,7 @@ package zi.zircky.spring_mvc_hibernate.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,8 +26,11 @@ public class AdminController {
   }
 
   @GetMapping()
-  public String readAllUsers(Model model) {
+  public String readAllUsers(Model model, @AuthenticationPrincipal User user) {
+    model.addAttribute("user", user);
     model.addAttribute("users", userService.getAllUser());
+    model.addAttribute("roles", roleService.getAllRoles());
+    model.addAttribute("title", "Admin panel");
     return "admin";
   }
 

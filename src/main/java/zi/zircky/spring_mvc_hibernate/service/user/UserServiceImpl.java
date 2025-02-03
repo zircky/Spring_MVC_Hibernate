@@ -2,8 +2,6 @@ package zi.zircky.spring_mvc_hibernate.service.user;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,8 +12,10 @@ import zi.zircky.spring_mvc_hibernate.dao.UserDao;
 import zi.zircky.spring_mvc_hibernate.model.Role;
 import zi.zircky.spring_mvc_hibernate.model.User;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
   @Override
   @Transactional
   public User createUser(User user) {
-    Set<Role> roles = new HashSet<Role>();
+    Set<Role> roles = new HashSet<>();
 
     user.setPassword(getbCryptPasswordEncoder.encode(user.getPassword()));
     user.getRoles().forEach(role -> {
@@ -106,14 +106,6 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userDao.findByEmail(username);
-    UserDetailsPrincipal userDetailsPrincipal = new UserDetailsPrincipal(user);
-
-    return userDetailsPrincipal;
-  }
-
-  private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-    return roles.stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName()))
-        .collect(Collectors.toList());
+    return new UserDetailsPrincipal(user);
   }
 }

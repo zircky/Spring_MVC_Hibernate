@@ -19,4 +19,5 @@ public interface UserService extends UserDetailsService {
   User readUserById(Long id);
 
   List<User> getAllUser();
+
 }

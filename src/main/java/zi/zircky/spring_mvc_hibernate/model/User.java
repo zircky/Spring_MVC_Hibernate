@@ -21,9 +21,6 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-//  @Column(name = "username")
-//  private String username;
-
   @Column(name = "password")
   private String password;
 
@@ -48,6 +45,7 @@ public class User {
   private Set<Role> roles = new HashSet<>();
 
   public User() {
+    // TODO document why this constructor is empty
   }
 
   public static String getStringRoles(Collection<Role> roles) {

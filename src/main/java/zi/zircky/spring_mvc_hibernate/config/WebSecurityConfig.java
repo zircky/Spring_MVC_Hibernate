@@ -7,6 +7,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -29,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests((authorize) -> {
+    http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(authorize -> {
       try {
         authorize
             .requestMatchers("/", "/index", "/sign-up", "/login", "/error").permitAll()
@@ -37,9 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
             .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
             .anyRequest().authenticated();
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        throw new IllegalArgumentException(e);
       }
-    }).securityContext((securityContext) -> securityContext
+    }).securityContext(securityContext -> securityContext
         .requireExplicitSave(false));
 
     http.formLogin(form -> {
@@ -47,13 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfiguration {
         form.loginPage("/login").permitAll()
             .successHandler(successHandler());
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        throw new IllegalArgumentException(e);
       }
     });
 
     http.logout().logoutSuccessUrl("/login");
 
-    http.exceptionHandling((exceptions) -> exceptions.accessDeniedPage("/forbidden"));
+    http.exceptionHandling(exceptions -> exceptions.accessDeniedPage("/forbidden"));
     return http.build();
   }
 
