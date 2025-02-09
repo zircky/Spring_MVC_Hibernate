@@ -1,19 +1,26 @@
-<header th:fragment="header" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<header class="header navbar navbar-dark sticky-top flex-md-nowrap p-1" th:fragment="header"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org">
   <!-- Static navbar -->
-  <nav class="navbar navbar-default bg-dark bg-gradient">
-    <div class="container-fluid">
-      <div th:if="${user.email}">
-        <p>Logged in as: <strong th:text="${user.email}"></strong></p>
-        <p>Roles: <span th:text="${user.roles}"></span></p>
-      </div>
+  <div class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6">
+    <div class="d-inline h5 fw-bold">
+      <!--      <span th:text="${user.email}"></span>-->
     </div>
-    <div class="navbar-nav">
-      <div class="nav-item text-nowrap">
-        <form action="/logout" method="post">
-          <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-          <button class="btn btn-link nav-link px-3" type="submit">Logout</button>
-        </form>
-      </div>
+    <div class="d-inline h5 fw-light">
+      <span>with roles:</span>
     </div>
-  </nav>
+    <div class="d-inline h5 fw-light">
+
+      <!--      <span th:text="${user.roles}">Role</span>-->
+    </div>
+  </div>
+  <div class="navbar-nav">
+    <div class="nav-item text-nowrap">
+      <form action="/logout" method="post">
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+        <button class="btn btn-link nav-link px-3" type="submit">Logout</button>
+      </form>
+
+    </div>
+  </div>
 </header>

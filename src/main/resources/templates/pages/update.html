@@ -1,77 +1,61 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title th:text="${user}"></title>
-  <link rel="stylesheet" th:href="@{/css/def.css}">
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-<main class="p-12 pb-52 rounded-l-lg flex justify-center">
-  <form method="POST" th:action="@{/admin/update}" th:object="${user}">
-    <div>
-      <input name="id" th:value="${id}" type="hidden"/>
+<div aria-hidden="true" aria-labelledby="editModal" class="modal fade" id="userEdit" tabindex="-1" th:fragment="edit"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.thymeleaf.org">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit User</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <form id="editFrom" th:method="put">
+            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
+            <div class="mb-3">
+              <label class="" for="editUserId"><strong>ID</strong></label>
+              <input class="form-control" disabled id="editUserId" name="id" placeholder="ID" type="text">
+            </div>
+            <div class="mb-3">
+              <label for="editFirstName">First Name</label>
+              <input class="form-control" id="editFirstName" name="name" placeholder="First Name" required
+                     type="text">
+            </div>
+            <div class="mb-3">
+              <label for="editLastName">Last Name</label>
+              <input class="form-control" id="editLastName" name="lastName" placeholder="Last Name" required
+                     type="text">
+            </div>
+            <div class="mb-3">
+              <label for="editAge">Age</label>
+              <input class="form-control" id="editAge" name="age" placeholder="Age" required type="number">
+            </div>
+            <div class="mb-3">
+              <label for="editEmail">Email</label>
+              <input class="form-control" id="editEmail" name="email" placeholder="Email Address" required
+                     type="email">
+            </div>
+            <div class="mb-3">
+              <label for="editPassword">Password</label>
+              <input class="form-control" id="editPassword" name="password" placeholder="Password" required
+                     type="password">
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="editRoles">Select role:</label>
+              <select
+                  class="form-select"
+                  id="editRoles"
+                  required
+              >
+                <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.id}"></option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-primary" type="submit">Edit</button>
+      </div>
     </div>
-    <div class="mt-2.5">
-      <label th:for="name">First Name: </label><br>
-      <input
-          class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
-          name="name" required th:field="*{firstName}" th:id="name"
-          type="text"><br>
-    </div>
-    <div class="mt-2.5">
-      <label th:for="lastName">Last Name: </label><br>
-      <input
-          class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
-          name="lastName" required th:field="*{lastName}" th:id="lastName"
-          type="text"><br>
-    </div>
-    <div class="mt-2.5">
-      <label th:for="age">Age:</label><br>
-      <input
-          class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
-          name="age" required th:field="*{age}" th:id="age"
-          type="number"><br>
-    </div>
-    <div class="mt-2.5">
-      <label th:for="email">Email:</label><br>
-      <input
-          class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
-          name="email" required th:field="*{email}" th:id="email"
-          type="email"><br>
-    </div>
-    <div class="mt-2.5">
-      <label th:for="username">Username:</label><br>
-      <input
-          class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
-          name="username" required th:field="*{username}" th:id="username"
-          type="text"><br>
-    </div>
-    <div class="mt-2.5">
-      <label th:for="password">Password:</label><br>
-      <input
-          class="px-4 py-2 w-full outline-none border border-gray border-solid focus:border-primary transition-all placeholder:text-gray rounded-lg"
-          name="password" required th:field="*{password}" th:id="password"
-          type="password"><br>
-    </div>
-    <!--    <div class="mt-2.5">-->
-    <!--      <label class="" for="roles">Select role:</label>-->
-    <!--      <div class="my-6 md:w-60">-->
-    <!--        <select-->
-    <!--            class="relative w-full h-10 px-4 text-sm transition-all bg-white border-b outline-none appearance-none focus-visible:outline-none peer border-slate-200 text-slate-500 autofill:bg-white focus:border-emerald-500 focus:focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"-->
-    <!--            id="roles"-->
-    <!--            th:field="*{roles}">-->
-    <!--          <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.id}"></option>-->
-    <!--        </select>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <div class="mt-2.5">
-      <input
-          class="rounded-md bg-gradient-to-r from-indigo-600 to-indigo-700 px-3 py-2 ml-[9.2rem] text-sm font-semibold text-white shadow-sm hover:bg-gradient-to-r from-indigo-500 to-indigo-600"
-          type="submit"
-          value="Submit">
-    </div>
-  </form>
-</main>
-</body>
-</html>
+  </div>
+</div>

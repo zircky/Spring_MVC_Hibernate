@@ -17,10 +17,11 @@ public class UserController {
   public UserController(UserService userService) {
     this.userService = userService;
   }
-  
+
   @GetMapping("/user")
   public String readUser(Principal principal, Model model) {
     model.addAttribute("user", userService.findByUsername(principal.getName()));
+    model.addAttribute("title", "User page");
     return "user";
   }
 }

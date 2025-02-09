@@ -2,7 +2,6 @@ package zi.zircky.spring_mvc_hibernate.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +10,7 @@ import zi.zircky.spring_mvc_hibernate.model.User;
 import zi.zircky.spring_mvc_hibernate.service.RoleService;
 import zi.zircky.spring_mvc_hibernate.service.user.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -26,8 +26,8 @@ public class AdminController {
   }
 
   @GetMapping()
-  public String readAllUsers(Model model, @AuthenticationPrincipal User user) {
-    model.addAttribute("user", user);
+  public String readAllUsers(Model model, Principal principal) {
+    model.addAttribute("user", userService.findByUsername(principal.getName()));
     model.addAttribute("users", userService.getAllUser());
     model.addAttribute("roles", roleService.getAllRoles());
     model.addAttribute("title", "Admin panel");
@@ -53,21 +53,18 @@ public class AdminController {
     return "redirect:/admin";
   }
 
-  @GetMapping("/update")
-  public String updateForm(Model model,
-                           @RequestParam("id") Long id) {
-    model.addAttribute("user", userService.readUserById(id));
-    return "update";
-  }
+//  @GetMapping("/update/{id}")
+//  public String updateForm(Model model,
+//                           @PathVariable Long id) {
+//    model.addAttribute("user", userService.readUserById(id));
+//    return "update";
+//  }
 
-  @PostMapping("/update")
+  @PutMapping("/update/{id}")
   public String update(@ModelAttribute("user") @Valid User user,
-                       BindingResult bindingResult,
                        @RequestParam("roles") List<Long> roleIds,
-                       @RequestParam("id") Long id) {
-    if (bindingResult.hasErrors()) {
-      return "update";
-    }
+                       @PathVariable Long id) {
+
     user.setRoles(roleService.findByIds(roleIds));
     userService.updateUser(id, user);
     return "redirect:/admin";
