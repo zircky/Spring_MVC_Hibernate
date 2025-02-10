@@ -53,16 +53,10 @@ public class AdminController {
     return "redirect:/admin";
   }
 
-//  @GetMapping("/update/{id}")
-//  public String updateForm(Model model,
-//                           @PathVariable Long id) {
-//    model.addAttribute("user", userService.readUserById(id));
-//    return "update";
-//  }
 
-  @PutMapping("/update/{id}")
+  @PostMapping("/update/{id}")
   public String update(@ModelAttribute("user") @Valid User user,
-                       @RequestParam("roles") List<Long> roleIds,
+                       @RequestParam(value = "roles") List<Long> roleIds,
                        @PathVariable Long id) {
 
     user.setRoles(roleService.findByIds(roleIds));

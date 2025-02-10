@@ -35,6 +35,9 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public Set<Role> findByIds(List<Long> ids) {
+    if (ids == null || ids.contains(null)) {
+      throw new IllegalArgumentException("ID list cannot be null or contain null values: " + ids);
+    }
     return new HashSet<>(roleDao.findAllById(ids));
   }
 }

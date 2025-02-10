@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public User createUser(User user) {
     Set<Role> roles = new HashSet<>();
-
     user.setPassword(getbCryptPasswordEncoder.encode(user.getPassword()));
     user.getRoles().forEach(role -> {
       if (role.getId() > 0) {
@@ -63,6 +62,9 @@ public class UserServiceImpl implements UserService {
     try {
       User user0 = readUserById(id);
       user0.setPassword(getbCryptPasswordEncoder.encode(user.getPassword()));
+      user0.setFirstName(user.getFirstName());
+      user0.setLastName(user.getLastName());
+      user0.setAge(user.getAge());
       user0.setEmail(user.getEmail());
       user0.setRoles(user.getRoles());
       userDao.save(user0);

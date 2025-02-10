@@ -4,14 +4,13 @@
   <!-- Static navbar -->
   <div class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6">
     <div class="d-inline h5 fw-bold">
-      <!--      <span th:text="${user.email}"></span>-->
+      <span th:text="${user.email}"></span>
     </div>
-    <div class="d-inline h5 fw-light">
+    <div class="d-inline h5 fw-light" id="userRoleId">
       <span>with roles:</span>
     </div>
     <div class="d-inline h5 fw-light">
-
-      <!--      <span th:text="${user.roles}">Role</span>-->
+      <span th:text="${user.roles}">Role</span>
     </div>
   </div>
   <div class="navbar-nav">
