@@ -1,4 +1,4 @@
-package zi.zircky.spring_mvc_hibernate.controller;
+package zi.zircky.spring_mvc_hibernate.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ public class UserController {
 
   @GetMapping("/user")
   public String readUser(Principal principal, Model model) {
-    model.addAttribute("user", userService.findByUsername(principal.getName()));
+    model.addAttribute("user", userService.getUserByEmail(principal.getName()));
     model.addAttribute("title", "User page");
     return "user";
   }

@@ -8,11 +8,12 @@ import zi.zircky.spring_mvc_hibernate.model.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class UserDetailsPrincipal implements UserDetails {
-  private final User user;
+  private final Optional<User> user;
 
-  public UserDetailsPrincipal(User user) {
+  public UserDetailsPrincipal(Optional<User> user) {
     this.user = user;
   }
 
@@ -20,7 +21,7 @@ public class UserDetailsPrincipal implements UserDetails {
   public Collection<? extends GrantedAuthority> getAuthorities() {
     List<GrantedAuthority> roles = new ArrayList<>();
 
-    user.getRoles().forEach(role -> {
+    user.get().getRoles().forEach(role -> {
       roles.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
     });
 
@@ -29,12 +30,12 @@ public class UserDetailsPrincipal implements UserDetails {
 
   @Override
   public String getPassword() {
-    return user.getPassword();
+    return user.get().getPassword();
   }
 
   @Override
   public String getUsername() {
-    return user.getEmail();
+    return user.get().getEmail();
   }
 
   @Override

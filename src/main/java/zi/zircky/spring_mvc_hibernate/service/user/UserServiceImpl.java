@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import zi.zircky.spring_mvc_hibernate.dao.RoleDao;
 import zi.zircky.spring_mvc_hibernate.dao.UserDao;
+import zi.zircky.spring_mvc_hibernate.dto.UserDto;
 import zi.zircky.spring_mvc_hibernate.model.Role;
 import zi.zircky.spring_mvc_hibernate.model.User;
 
@@ -75,8 +76,14 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   @Override
-  public User findByUsername(String username) {
-    return userDao.findByEmail(username);
+  public Optional<User> getUserByEmail(String email) {
+    return userDao.findByEmail(email);
+  }
+
+  @Override
+  public boolean authenticate(String email, String password) {
+    Optional<User> userOptional = userDao.findByEmail(email);
+    return userOptional.isPresent() && getbCryptPasswordEncoder.matches(password, userOptional.get().getPassword());
   }
 
   @Override
@@ -105,9 +112,45 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public void register(UserDto request) {
+    validateRequest(request);
+    User user = mapToUser(request);
+    addRoleToUser(user, request.getRoles());
+
+    System.out.println("Пользователь перед сохранением: " + user);
+    userDao.save(user);
+
+  }
+
+  @Override
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userDao.findByEmail(username);
+    Optional<User> user = userDao.findByEmail(username);
     return new UserDetailsPrincipal(user);
   }
+
+  private void validateRequest(UserDto request) {
+    if (userDao.existsByEmail(request.getEmail())) {
+      throw new IllegalArgumentException("Email уже используется");
+    }
+  }
+
+  private User mapToUser(UserDto requsest) {
+    User user = new User();
+    user.setFirstName(requsest.getFirstName());
+    user.setLastName(requsest.getLastName());
+    user.setAge(requsest.getAge());
+    user.setEmail(requsest.getEmail());
+    user.setPassword(getbCryptPasswordEncoder.encode(requsest.getPassword()));
+
+    return user;
+  }
+
+  private void addRoleToUser(User user, Long roleId) {
+    Role role = roleDao.findById(roleId).orElseThrow(() -> new RuntimeException("Роль не найдена"));
+
+    user.getRoles().add(role);
+  }
+
+
 }

@@ -9,21 +9,13 @@
 <body>
 <main class="p-4 pb-5 rounded-start-lg d-flex flex-column align-items-center">
   <h2 class="mb-4">Please sign up</h2>
-  <form class="w-100" style="max-width: 400px;" th:action="@{/login}" th:method="POST">
+  <form class="w-100" id="loginForm" style="max-width: 400px;" th:action="@{/login}" th:method="POST">
     <fieldset>
-      <!-- Error message -->
-      <div class="alert alert-danger" role="alert" th:if="${param.error != null}">
-        Invalid username and password.
-      </div>
-      <!-- Logout message -->
-      <div class="alert alert-success" role="alert" th:if="${param.logout != null}">
-        You have been logged out.
-      </div>
-      <!-- Username field -->
+      <div class="alert alert-danger d-none" id="errorMessage"></div>
       <div class="mb-3">
         <input
             class="form-control"
-            id="username" name="username" placeholder="Email address" required
+            id="email" name="username" placeholder="Email address" required
             type="email">
       </div>
       <!-- Password field -->
@@ -35,7 +27,7 @@
       </div>
       <!-- Actions -->
       <div class="d-flex justify-content-between align-items-center">
-        <a class="btn btn-link p-0" th:href="@{/sign-up}">Sign up</a>
+        <a class="btn btn-link p-0" href="/sign-up">Sign up</a>
         <button
             class="btn btn-primary px-4"
             type="submit">Sign in
@@ -47,5 +39,6 @@
 <script crossorigin="anonymous"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!--<script th:src="@{js/auth/login.js}" type="application/javascript"></script>-->
 </body>
 </html>

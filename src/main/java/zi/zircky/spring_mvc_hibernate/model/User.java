@@ -48,6 +48,14 @@ public class User {
     // TODO document why this constructor is empty
   }
 
+  public User(String firstName, String lastName, int age, String email, String password) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+    this.email = email;
+    this.password = password;
+  }
+
   public static String getStringRoles(Collection<Role> roles) {
     return roles.stream()
         .map(role -> role.getAuthority().replaceAll("ROLE_", ""))
