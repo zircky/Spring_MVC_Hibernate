@@ -1,17 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
   const userEdit = document.getElementById('userEdit')
-  const url = "http://localhost:8080/api/admin"
+  const url = "http://localhost:8080/api/admin/editUser"
   var modulsEdit = new bootstrap.Modal(document.getElementById(""))
 
-  userEdit.addEventListener('show.bs.modal', event => {
+  userEdit.addEventListener('show.bs.modal', async (event) => {
     const button = event.relatedTarget
-    const editId = button.getAttribute('data-id')
 
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify()
+    })
     const form = userEdit.querySelector('#editFrom');
-    if (form) {
-      form.action = `/admin/update/${editId}`;
-    }
-    console.log(editId)
+
 
     userEdit.querySelector('.modal-body input[id="editUserId"]').value = button.getAttribute('data-id')
     userEdit.querySelector('.modal-body input[id="editFirstName"]').value = button.getAttribute('data-firstName')
@@ -19,13 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
     userEdit.querySelector('.modal-body input[id="editAge"]').value = button.getAttribute('data-age')
     userEdit.querySelector('.modal-body input[id="editEmail"]').value = button.getAttribute('data-email')
 
-    console.log("User Data:", {
-      id: button.getAttribute('data-id'),
-      firstName: button.getAttribute('data-firstName'),
-      lastName: button.getAttribute('data-lastName'),
-      age: button.getAttribute('data-age'),
-      email: button.getAttribute('data-email'),
-    });
   })
 
 

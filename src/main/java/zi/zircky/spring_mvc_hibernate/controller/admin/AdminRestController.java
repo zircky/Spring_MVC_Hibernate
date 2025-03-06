@@ -38,9 +38,9 @@ public class AdminRestController {
   }
 
   @PostMapping("/editUser")
-  public ResponseEntity<?> editUser(@RequestBody ) {
+  public ResponseEntity<?> editUser(@RequestBody User user) {
     try {
-      userService.updateUser(userDto.get);
+      userService.updateUser(user.getId(), user);
       return ResponseEntity.ok("Пользователь успешно изменен");
     } catch (IllegalArgumentException e) {
       throw new RuntimeException(e);
