@@ -1,13 +1,14 @@
 package zi.zircky.spring_mvc_hibernate.controller.admin;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import zi.zircky.spring_mvc_hibernate.dto.UserDto;
+import zi.zircky.spring_mvc_hibernate.model.User;
 import zi.zircky.spring_mvc_hibernate.service.RoleService;
 import zi.zircky.spring_mvc_hibernate.service.user.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -20,6 +21,11 @@ public class AdminRestController {
     this.roleService = roleService;
   }
 
+  @GetMapping()
+  public ResponseEntity<List<User>> getAllUsers() {
+    return new ResponseEntity<>(userService.getAllUser(), HttpStatus.OK);
+  }
+
   @PostMapping("/new")
   public ResponseEntity<?> newCreate(@RequestBody UserDto userDto) {
     try {
@@ -28,6 +34,16 @@ public class AdminRestController {
       return ResponseEntity.ok("Пользователь успешно добавлен");
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  @PostMapping("/editUser")
+  public ResponseEntity<?> editUser(@RequestBody ) {
+    try {
+      userService.updateUser(userDto.get);
+      return ResponseEntity.ok("Пользователь успешно изменен");
+    } catch (IllegalArgumentException e) {
+      throw new RuntimeException(e);
     }
   }
 }

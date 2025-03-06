@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+
 public class UserDetailsPrincipal implements UserDetails {
   private final Optional<User> user;
 

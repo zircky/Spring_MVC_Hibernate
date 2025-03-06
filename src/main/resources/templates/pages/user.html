@@ -5,6 +5,7 @@
 
 <header th:replace="fragments/header :: header"></header>
 <main class="wrapper">
+
   <aside th:replace="layout :: sidebar"></aside>
 
   <div class="content bg-light">
@@ -27,16 +28,7 @@
               <th scope="col">Role</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-              <td th:text="${user.id}"/>
-              <td th:text="${user.firstName}"></td>
-              <td th:text="${user.lastName}"></td>
-              <td th:text="${user.age}"></td>
-              <td th:text="${user.email}"></td>
-              <td th:text="${user.roles}"></td>
-            </tr>
-            </tbody>
+            <tbody id="tbody"/>
           </table>
         </div>
       </div>
@@ -45,5 +37,6 @@
 </main>
 
 <script th:src="@{js/active.js}"></script>
+<script src="/js/app.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package zi.zircky.spring_mvc_hibernate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class Role implements GrantedAuthority {
   private String name;
 
   @ManyToMany(mappedBy = "roles")
+  @JsonIgnore
   private Set<User> users = new HashSet<>();
 
   public Role() {

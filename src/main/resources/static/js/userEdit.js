@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const userEdit = document.getElementById('userEdit')
+  const url = "http://localhost:8080/api/admin"
+  var modulsEdit = new bootstrap.Modal(document.getElementById(""))
 
   userEdit.addEventListener('show.bs.modal', event => {
     const button = event.relatedTarget

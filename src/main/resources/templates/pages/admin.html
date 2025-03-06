@@ -8,7 +8,7 @@
   <aside th:replace="layout :: sidebar"></aside>
 
   <div class="content bg-light">
-    <h1>Admin panel</h1>
+    <h1>Admin plane</h1>
     <div>
       <div class="nav nav-tabs" id="nav-tab" role="tablist">
         <button aria-controls="nav-user-table" aria-selected="true" class="nav-link active"
@@ -18,8 +18,8 @@
         <button aria-controls="nav-new-user" aria-selected="false" class="nav-link" data-bs-target="#nav-new-user"
                 data-bs-toggle="tab"
                 id="new-user-tab" role="tab" type="button">
-          <img alt="Add" class="img-fluid " style="width: 1.6rem; height: 1.6rem"
-               th:src="@{/img/add-box-line.svg}"><span>New User</span>
+          <img alt="Add" class="img-fluid " src="/img/add-box-line.svg"
+               style="width: 1.6rem; height: 1.6rem"><span>New User</span>
         </button>
       </div>
     </div>
@@ -44,60 +44,17 @@
                 <th scope="col">Delete</th>
               </tr>
               </thead>
-              <tbody>
-              <tr th:each="user : ${users}">
-                <td th:text="${user.id}"/>
-                <td th:text="${user.firstName}"/>
-                <td th:text="${user.lastName}"/>
-                <td th:text="${user.age}"/>
-                <td th:text="${user.email}"/>
-                <td th:text="${user.roles}"/>
-                <!-- Edit action -->
-                <td>
-                  <button class="btn btn-outline-primary btn-sm" data-bs-target="#userEdit" data-bs-toggle="modal"
-                          th:data-age='${user.age}'
-                          th:data-email='${user.email}'
-                          th:data-firstName='${user.firstName}'
-                          th:data-id='${user.id}'
-                          th:data-lastName='${user.lastName}'
-                          th:data-roles="${#strings.listJoin(user.roles, ', ')}"
-                          type="button">
-                    <img alt="Edit" class="img-fluid" style="width: 1.6rem; height: 1.6rem"
-                         th:src="@{/img/edit-2-line.svg}">
-                    <span>Edit</span>
-                  </button>
-                </td>
-                <td>
-                  <button class="btn btn-outline-danger btn-sm" data-bs-target="#userDelete" data-bs-toggle="modal"
-                          th:data-age="${user.age}"
-                          th:data-email="${user.email}"
-                          th:data-firstName="${user.firstName}"
-                          th:data-id="${user.id}"
-                          th:data-lastName="${user.lastName}"
-                          th:data-roles="${user.roles}"
-                          type="button">
-                    <img alt="Delete" class="img-fluid" style="width: 1.65rem; height: 1.65rem"
-                         th:src="@{/img/delete-row.svg}">
-                    <span>Delete</span>
-                  </button>
-                </td>
-              </tr>
-              </tbody>
+              <tbody id="tbody"/>
             </table>
           </div>
         </div>
       </div>
-      <section th:replace="create :: addNew"></section>
+      <section></section>
     </div>
 
   </div>
 </main>
 
-<div th:replace="update :: edit"/>
-<div th:replace="delete :: delete"/>
-
-<script th:src="@{js/userEdit.js}"></script>
-<script th:src="@{js/userDelete.js}"></script>
-<script th:src="@{js/active.js}"></script>
 </body>
+<script src="/js/app.js" type="application/javascript"></script>
 </html>

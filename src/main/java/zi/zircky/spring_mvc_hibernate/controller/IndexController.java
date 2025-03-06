@@ -1,6 +1,7 @@
 package zi.zircky.spring_mvc_hibernate.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -16,12 +17,14 @@ public class IndexController {
   }
 
   @GetMapping("/admin")
-  public String admin() {
+  public String admin(Model model) {
+    model.addAttribute("title", "Admin ");
     return "admin";
   }
 
   @GetMapping("/user")
-  public String user() {
+  public String user(Model model) {
+    model.addAttribute("title", "User ");
     return "user";
   }
 }
