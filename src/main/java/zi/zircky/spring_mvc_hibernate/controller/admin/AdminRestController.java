@@ -37,10 +37,11 @@ public class AdminRestController {
     }
   }
 
-  @PostMapping("/editUser")
-  public ResponseEntity<?> editUser(@RequestBody User user) {
+  @PutMapping("/editUser/{id}")
+  public ResponseEntity<?> editUser(@RequestBody User user, @RequestParam(value = "roles") List<Long> roleIds, @PathVariable Long id) {
     try {
-      userService.updateUser(user.getId(), user);
+      user.setRoles(roleService.findByIds(roleIds));
+      userService.updateUser(id, user);
       return ResponseEntity.ok("Пользователь успешно изменен");
     } catch (IllegalArgumentException e) {
       throw new RuntimeException(e);

@@ -1,7 +1,21 @@
+document.addEventListener("DOMContentLoaded", async (e) => {
+  const response = await fetch('/api/auth/roles'); // Получаем роли с сервера
+  const roles = await response.json();
+  console.log(roles)
+  const roleSelect = document.getElementById('editRoles');
+
+  roles.forEach(role => {
+    const option = document.createElement('option');
+    option.value = role.id;
+    option.text = role.name;
+    roleSelect.appendChild(option);
+  });
+})
+
 document.addEventListener("DOMContentLoaded", async () => {
   const header = document.getElementById("header")
   const tbody = document.getElementById("tbody")
-
+  const editModal = new bootstrap.Modal(document.getElementById("userEdit"))
   const currentUrl = window.location.pathname
   const url = "http://localhost:8080/api/admin"
 
@@ -46,13 +60,14 @@ document.addEventListener("DOMContentLoaded", async () => {
      <td>${user.email}</td>
      <td>${user.roles.map(role => role.name).join(", ")}</td>
      <td>
-         <button class="btn btn-outline-primary btn-sm" data-bs-target="#userEdit" data-bs-toggle="modal" type="button">
+         <button class="btn btn-outline-primary btn-sm edit-btn
+         " data-id="${user.id}" data-bs-target="#userEdit" data-bs-toggle="modal" type="button">
            <img alt="Edit" class="img-fluid" src="/img/edit-2-line.svg" style="width: 1.6rem; height: 1.6rem">
            <span>Edit</span>
          </button>
        </td>
        <td>
-         <button class="btn btn-outline-danger btn-sm" data-bs-target="#userDelete" data-bs-toggle="modal" type="button">
+         <button class="btn btn-outline-danger btn-sm" data-id="${user.id}" data-bs-target="#userDelete" data-bs-toggle="modal" type="button">
            <img alt="Delete" class="img-fluid" src="/img/delete-row.svg" style="width: 1.65rem; height: 1.65rem">
            <span>Delete</span>
          </button>
@@ -68,5 +83,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       <td>${user.roles.map(role => role.name).join(", ")}</td>
     </tr>
     `
+  })
+
+  document.querySelectorAll(".edit-btn").forEach(button => {
+    button.addEventListener("click", async (e) => {
+      const userId = e.target.closest("button").dataset.id
+      const user = data.find(u => u.id == userId)
+
+      document.getElementById("editUserId").value = user.id
+      document.getElementById("editFirstName").value = user.firstName
+      document.getElementById("editLastName").value = user.lastName
+      document.getElementById("editAge").value = user.age
+      document.getElementById("editEmail").value = user.email
+
+
+      editModal.show()
+    })
   })
 })

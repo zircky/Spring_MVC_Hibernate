@@ -36,7 +36,6 @@ document.getElementById('signUpForm').onsubmit = async function (event) {
 
     if (response.ok) {
       window.location.href = "/login"
-      alert('Пользователь успешно зарегистрирован');
     } else {
       alert('Ошибка регистрации');
     }
